@@ -3,6 +3,7 @@ package com.deemsys.project.captcharesolver;
 import com.deathbycaptcha.Captcha;
 import com.deathbycaptcha.Client;
 import com.deathbycaptcha.HttpClient;
+import com.deathbycaptcha.SocketClient;
 
 import java.io.IOException;
 
@@ -18,20 +19,20 @@ public class CaptchaResolverService {
 		String base64Image = base64Captcha.split(",")[1];
 		byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
 		CaptchaResultForm captchaResultForm=new CaptchaResultForm();
-		Client client = (Client)(new HttpClient(username, password));
+		Client client = (Client)(new SocketClient(username, password));
         //Client client = (Client)(new SocketClient(args[0], args[1]));
         client.isVerbose = false;
         try {
-//            try {
-//                System.out.println("Your balance is " + client.getBalance() + " US cents");
-//            } catch (IOException e) {
-//                System.out.println("Failed fetching balance: " + e.toString());
-//                //returnStr="Failed to Fetch Balance! Try Again Later!";
-//                captchaResultForm.setErrorCode("104");
-//                captchaResultForm.setErrorMessage("Failed fetching balance: " + e.toString());
-//                captchaResultForm.setStatus(0);
-//                return captchaResultForm;
-//            }
+            /*try {
+                System.out.println("Your balance is " + client.getBalance() + " US cents");
+            } catch (IOException e) {
+                System.out.println("Failed fetching balance: " + e.toString());
+                //returnStr="Failed to Fetch Balance! Try Again Later!";
+                captchaResultForm.setErrorCode("104");
+                captchaResultForm.setErrorMessage("Failed fetching balance: " + e.toString());
+                captchaResultForm.setStatus(0);
+                return captchaResultForm;
+            }*/
 
             Captcha captcha = null;
             try {
@@ -40,6 +41,7 @@ public class CaptchaResolverService {
                 // vector of bytes, and optional solving timeout (in seconds) here.
                 captcha = client.decode(imageBytes, 120);
             } catch (IOException e) {
+                System.out.println("Failed uploading Image: " + e.toString());
                 captchaResultForm.setErrorCode("105");
                 captchaResultForm.setErrorMessage("Failed uploading Image: " + e.toString());
                 captchaResultForm.setStatus(0);
