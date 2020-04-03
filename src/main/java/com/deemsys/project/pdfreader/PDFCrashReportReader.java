@@ -442,8 +442,13 @@ public class PDFCrashReportReader {
 		default:
 			break;
 		}
-		if(Integer.parseInt(injuryProperties.getProperty("awsUpload"))==1)				
+		if(Integer.parseInt(injuryProperties.getProperty("awsUpload"))==1)	
+		{
 			awsFileUpload.uploadFileToAWSS3(file.getAbsolutePath(), fileName);
+			String AwsCopyFolderPath=injuryProperties.getProperty("AWSFileCopyFolder")+fileName;
+			Files.copy(file.toPath(), Paths.get(AwsCopyFolderPath),
+				StandardCopyOption.REPLACE_EXISTING);	
+		}
 		if(Integer.parseInt(injuryProperties.getProperty("env"))==1)
 			file.delete();
 }
@@ -1023,8 +1028,13 @@ public class PDFCrashReportReader {
 										 new Date(), numberOfPatients, vehicleCount, fileName, null, isRunnerReport, new Date(), 1, new Date(), new Date(), localReportNumber.replaceAll(" ", ""), null, null, null);
 							
 							crashReportDAO.save(crashReport);
-							if(Integer.parseInt(injuryProperties.getProperty("awsUpload"))==1)				
+							if(Integer.parseInt(injuryProperties.getProperty("awsUpload"))==1)	
+							{
 								awsFileUpload.uploadFileToAWSS3(file.getAbsolutePath(), fileName);
+								String AwsCopyFolderPath=injuryProperties.getProperty("AWSFileCopyFolder")+fileName;
+								Files.copy(file.toPath(), Paths.get(AwsCopyFolderPath),
+									StandardCopyOption.REPLACE_EXISTING);
+							}
 							isSaveReport = true;
 							//End Save
 							
